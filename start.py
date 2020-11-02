@@ -74,9 +74,9 @@ def get_login_session(credential):
     login_response = session.post('https://www.instagram.com/accounts/login/ajax/', data=credential, allow_redirects=True).json()
     if 'two_factor_required' in login_response and login_response['two_factor_required']:
         identifier = login_response['two_factor_info']['two_factor_identifier']
-        username = credential['username']
+        username = credential['_ana.dl']
         verification_code = input('2FA Verification Code: ')
-        verification_data = {'username': username, 'verificationCode': verification_code, 'identifier': identifier}
+        verification_data = {'_ana.dl': username, 'verificationCode': verification_code, 'identifier': identifier}
         two_factor_response = session.post('https://www.instagram.com/accounts/login/ajax/two_factor/', data=verification_data, allow_redirects=True).json()
         if two_factor_response['authenticated']:
             return session, two_factor_response
@@ -91,9 +91,9 @@ def login(credential):
 
     user, pwd = '', ''
     while True:
-        user = input('Username: ')
+        user = input('_ana.dl: ')
         pwd = getpass.getpass(prompt='Password: ')
-        session, res = get_login_session({'username': user, 'password': pwd})
+        session, res = get_login_session({'_ana.dl': user, 'password': pwd})
         if res['authenticated']:
             break
         if not res['authenticated']:
@@ -103,7 +103,7 @@ def login(credential):
             exit()
 
     permission = input('save credentials(y/N)?: ')
-    credential = {'username': user, 'password': pwd}
+    credential = {'_ana.dl': user, 'password': pwd}
     save_credentials(credential, permission == 'y')
     return session
 
@@ -120,3 +120,4 @@ def main():
 
 if __name__ == '__main__':
     main()
+
